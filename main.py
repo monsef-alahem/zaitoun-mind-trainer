@@ -2,7 +2,7 @@
 author  :   monsef alahem
 email   :   m.alahem09@gmail.com
 version :   1.0
-start   :   09-08-2019
+start   :   12-01-2019
 
 '''
 
@@ -36,6 +36,34 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.progressbar import ProgressBar
 
 
+eng = 0
+ar = 1
+
+
+
+# taa
+# ufe90 replaced by ufe8f
+# dha
+# ufec8 replaced by ufec5
+# ta
+# ufec2 replaced by ufec1
+
+
+
+lang = {
+'ok' : [u'ok', u'\ufed5\ufed3\ufe8d\ufeed\ufee3'],
+'return' : [u'return', u'\ufec9\ufeed\ufe9f\ufead'],
+
+'*Zaitoun mind trainer*' : [u'*Zaitoun mind trainer*', u'\u002a\ufee5\ufeed\ufe98\ufef3\ufeaf\ufedf\ufe8d\u0020\ufedd\ufed8\ufecc\ufedf\ufe8d\u0020\ufe8f\ufead\ufea9\ufee3\u002a'], #\u0029
+'phone number game' : [u'phone number game', u'\ufed1\ufe97\ufe8e\ufeec\ufedf\ufe8d\u0020\ufee1\ufe8e\ufed7\ufead\ufe83\u0020\ufe94\ufe92\ufecc\ufedf'],
+'say 20 ! lvl 1' : [u'say 20 ! lvl 1', u'\u0031\u0020\ufeef\ufeed\ufe98\ufeb4\ufee3\u0020\u0021\u0020\u0032\u0030\u0020\ufedd\ufed7'],
+'say 20 ! lvl 2' : [u'say 20 ! lvl 2', u'\u0032\u0020\ufeef\ufeed\ufe98\ufeb4\ufee3\u0020\u0021\u0020\u0032\u0030\u0020\ufedd\ufed7'],
+'this is the correct answer' : [u'this is the correct answer', u'\ufea2\ufef4\ufea4\ufebc\ufedf\ufe8d\u0020\ufe8f\ufe8d\ufeed\ufea0\ufedf\ufe8d\u0020\ufeed\ufeeb\u0020\ufe8d\ufeab\ufeeb'],
+'score: 0/0' : [u'score: 0/0', u'\u0030\u005c\u0030\u0020\u003a\u0020\ufec1\ufed8\ufee8\ufedf\ufe8d'],
+'player: 0' : [u'player: 0', u'\u0030\u0020\u003a\u0020\ufe8f\ufecb\ufefb\ufe8d'],
+'clean' : [u'clean', u'\ufecd\ufe8d\ufead\ufed3\ufe87'],
+'cpu: 0' : [u'cpu: 0', u'\u0030\u0020\u003a\u0020\ufe9e\ufedf\ufe8e\ufecc\ufee4\ufedf\ufe8d']
+}
 
     # ProgressBar:
     #     id: pb
@@ -52,7 +80,10 @@ from kivy.uix.progressbar import ProgressBar
 
 #build app with kv language
 cvrt = '''
+#: import lang __main__.lang
 
+#: import ar __main__.ar
+#: import eng __main__.eng
 
 <Zaitoun>:
 
@@ -69,6 +100,14 @@ cvrt = '''
         #     source: 'bg.png'
         #     # color: .2, .2, .2, .4
         #     allow_stretch: True
+
+
+
+        canvas:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'bg.png'
     
         BoxLayout:
             id: logo
@@ -81,25 +120,33 @@ cvrt = '''
 
         Label:
             id: title
-            #font_name: 'arial.ttf'
-            text: "*Zaitoun mind trainer*" #utf code mean menu in arabic
+            text: lang['*Zaitoun mind trainer*'][ar]
+            font_name: 'arial.ttf'
             size_hint: (.66, .2)
             pos_hint: {'x':.17, 'y':.85}
             font_size: 40
             color: 1, 1, 0, 1
 
         Button:
-            text: 'phone number game'
+            text: lang['phone number game'][ar]
+            font_name: 'arial.ttf'
             size_hint: (.4, .1)
             pos_hint: {'x':.3, 'y':.66}
+            on_press: root.attach_kb()
             on_press: root.goto_layout(phone_number)
             on_press: root.timer_start()
-            on_press: root.attach_kb()
         Button:
-            text: 'say 20 !'
+            text: lang['say 20 ! lvl 1'][ar]
+            font_name: 'arial.ttf'
             size_hint: (.4, .1)
             pos_hint: {'x':.3, 'y':.54}
-            on_press: root.goto_layout(say_20)
+            on_press: root.goto_layout(say_20_l1)
+        Button:
+            text: lang['say 20 ! lvl 2'][ar]
+            font_name: 'arial.ttf'
+            size_hint: (.4, .1)
+            pos_hint: {'x':.3, 'y':.42}
+            on_press: root.goto_layout(say_20_l2)
         # Button:
         #     text: 'mirath calculator'
         #     size_hint: (.4, .1)
@@ -143,6 +190,14 @@ cvrt = '''
         id: phone_number
         # orientation: 'horizentale'
 
+
+
+        canvas:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'bg.png'
+
         ProgressBar:
             id: pb
             size_hint: (.8, .05)
@@ -171,12 +226,23 @@ cvrt = '''
             #     background_color: 0,2,1,1
             #     on_press: root.goto_layout(menu)
 
+        Label:
+            id: message
+            text: lang['this is the correct answer'][ar]
+            font_name: 'arial.ttf'
+            font_size: 30
+            # font_name: 'Roboto'
+            size_hint: (1, .05)
+            pos_hint: {'x':0, 'y':.40}
+            opacity: 0
+
+
 
         Button:
             id: ret_phone_btn
-            # font_name: 'arial.ttf'
-            font_name: 'Roboto'
-            text: u'return'
+            font_name: 'arial.ttf'
+            # font_name: 'Roboto'
+            text: lang['return'][ar]
             #background_color: 0,2,1,1
             size_hint: (.2, .1)
             pos_hint: {'x':.7, 'y':.08}
@@ -195,9 +261,10 @@ cvrt = '''
         #     size_hint: (.4, .1)
         #     pos_hint: {'x':.3, 'y':.4}
 
-        ScreenLabel:
+        Label:
             id: score
-            text: 'score: 0/0'
+            text: lang['score: 0/0'][ar]
+            font_name: 'arial.ttf'
             font_size: 40
             size_hint: (.2, .1)
             pos_hint: {'x':.7, 'y':.9}
@@ -211,51 +278,59 @@ cvrt = '''
 
 
 
-# say 20
+# say 20 lvl 1
     FloatLayout:
+        id: say_20_l1
         size_hint: (1, 1)
         pos_hint: {'x':0, 'y':.0}
-        id: say_20
         # orientation: 'horizentale'
 
 
 
+        canvas:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'bg.png'
+
 
         Button:
-            id: ret_say20_btn
-            # font_name: 'arial.ttf'
-            font_name: 'Roboto'
-            text: u'return'
+            id: ret_say20_l1_btn
+            font_name: 'arial.ttf'
+            # font_name: 'Roboto'
+            text: lang['return'][ar]
             #background_color: 0,2,1,1
             size_hint: (.2, .1)
             pos_hint: {'x':.7, 'y':.08}
             on_press: root.goto_layout(menu)
             on_press: root.detach_kb()
 
-        ScreenLabel:
-            id: score_player_say20
+        Label:
+            id: score_player_say20_l1
             font_size: 40
-            text: 'player: 0'
+            text: lang['player: 0'][ar]
+            font_name: 'arial.ttf'
             size_hint: (.2, .1)
             pos_hint: {'x':.7, 'y':.9}
 
-        ScreenLabel:
-            id: score_cpu_say20
+        Label:
+            id: score_cpu_say20_l1
             font_size: 40
-            text: 'cpu: 0'
+            text: lang['cpu: 0'][ar]
+            font_name: 'arial.ttf'
             size_hint: (.2, .1)
             pos_hint: {'x':.1, 'y':.9}
 
 
-        ScreenLabel:
-            id: number_say20
+        Label:
+            id: number_say20_l1
             text: '0'
             font_size: 70
             size_hint: (.2, .1)
             pos_hint: {'x':.4, 'y':.7}
 
-        ScreenLabel:
-            id: operation_say20
+        Label:
+            id: operation_say20_l1
             text: ''
             size_hint: (.2, .1)
             pos_hint: {'x':.5, 'y':.7}
@@ -263,26 +338,26 @@ cvrt = '''
             color: 1, 1, 0, .5
 
         Button:
-            id: plus1
+            id: plus1_l1
             font_size: 40
             # font_name: 'arial.ttf'
-            font_name: 'Roboto'
+            # font_name: 'Roboto'
             text: u'+ 1'
             #background_color: 0,2,1,1
             size_hint: (.2, .1)
             pos_hint: {'x':.2, 'y':.5}
-            on_press: root.increase_by1()
+            on_press: root.increase_by1_l1()
 
         Button:
-            id: plus2
+            id: plus2_l1
             font_size: 40
             # font_name: 'arial.ttf'
-            font_name: 'Roboto'
+            # font_name: 'Roboto'
             text: u'+ 2'
             #background_color: 0,2,1,1
             size_hint: (.2, .1)
             pos_hint: {'x':.6, 'y':.5}
-            on_press: root.increase_by2()
+            on_press: root.increase_by2_l1()
 
 
 
@@ -291,6 +366,106 @@ cvrt = '''
 
 
 
+
+# say 20 lvl 2
+    FloatLayout:
+        id: say_20_l2
+        size_hint: (1, 1)
+        pos_hint: {'x':0, 'y':.0}
+        # orientation: 'horizentale'
+
+
+
+        canvas:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'bg.png'
+                
+
+        Button:
+            id: ret_say20_l2_btn
+            font_name: 'arial.ttf'
+            # font_name: 'Roboto'
+            text: lang['return'][ar]
+            #background_color: 0,2,1,1
+            size_hint: (.2, .1)
+            pos_hint: {'x':.7, 'y':.08}
+            on_press: root.goto_layout(menu)
+            on_press: root.detach_kb()
+
+        Label:
+            id: score_player_say20_l2
+            font_size: 40
+            text: lang['player: 0'][ar]
+            font_name: 'arial.ttf'
+            size_hint: (.2, .1)
+            pos_hint: {'x':.7, 'y':.9}
+
+        Label:
+            id: score_cpu_say20_l2
+            font_size: 40
+            text: lang['cpu: 0'][ar]
+            font_name: 'arial.ttf'
+            size_hint: (.2, .1)
+            pos_hint: {'x':.1, 'y':.9}
+
+
+        Label:
+            id: number_say20_l2
+            text: '0'
+            font_size: 70
+            size_hint: (.2, .1)
+            pos_hint: {'x':.4, 'y':.7}
+
+        Label:
+            id: operation_say20_l2
+            text: ''
+            size_hint: (.2, .1)
+            pos_hint: {'x':.5, 'y':.7}
+            font_size: 40
+            color: 1, 1, 0, .5
+
+        Button:
+            id: plus1_l2
+            font_size: 40
+            # font_name: 'arial.ttf'
+            # font_name: 'Roboto'
+            text: u'+ 1'
+            #background_color: 0,2,1,1
+            size_hint: (.2, .1)
+            pos_hint: {'x':.1, 'y':.5}
+            on_press: root.increase_by1_l2()
+
+        Button:
+            id: plus2_l2
+            font_size: 40
+            # font_name: 'arial.ttf'
+            # font_name: 'Roboto'
+            text: u'+ 2'
+            #background_color: 0,2,1,1
+            size_hint: (.2, .1)
+            pos_hint: {'x':.4, 'y':.5}
+            on_press: root.increase_by2_l2()
+
+        Button:
+            id: plus3_l2
+            font_size: 40
+            # font_name: 'arial.ttf'
+            # font_name: 'Roboto'
+            text: u'+ 3'
+            #background_color: 0,2,1,1
+            size_hint: (.2, .1)
+            pos_hint: {'x':.7, 'y':.5}
+            on_press: root.increase_by3_l2()
+
+
+
+
+
+
+
+#idea : set pointer to a widget then attach kb
 
     FloatLayout:
         id: keyboard
@@ -345,21 +520,21 @@ cvrt = '''
                 on_press: root.enter_number(kb_val, 0)
             Button:
                 id: goto_page_btn
-                #font_name: 'arial.ttf'
-                #text: u'ok'#means done in arabic
-                text: 'ok'
+                font_name: 'arial.ttf'
+                text: lang['ok'][ar]
                 on_press: root.check_answer()
                 # on_press: root.convert(kb_val)
 
-            ScreenLabel:
+            Label:
                 opacity:0
 
             Button:
-                text: u'clean'
+                text: lang['clean'][ar]
+                font_name: 'arial.ttf'
                 on_press: kb_val.text = ''
                 #on_press: kb_val.text = kb_val.text[:-1]
 
-            ScreenLabel:
+            Label:
                 opacity:0
 
     
@@ -432,9 +607,15 @@ class Zaitoun(FloatLayout):
     show_answer = True
     score = 0
     tries = 0
-    number_say20 = 0
-    score_cpu_say20 = 0
-    score_player_say20 = 0
+
+    number_say20_l1 = 0
+    score_cpu_say20_l1 = 0
+    score_player_say20_l1 = 0
+
+    number_say20_l2 = 0
+    score_cpu_say20_l2 = 0
+    score_player_say20_l2 = 0
+
     operator_opacity = 1.
     isstop = True
     timer_val = 0
@@ -478,6 +659,7 @@ class Zaitoun(FloatLayout):
             generated_number = ''
             self.generate_number()
             # print(self.ids.ret_phone_btn.font_name)
+
             self.isfirsttime = 0
         # self.ids.operation_say20.color = (1, 1, 0, self.operator_opacity)
         # print(self.operator_opacity)
@@ -514,8 +696,23 @@ class Zaitoun(FloatLayout):
         self.current_layout = layout
         self.add_widget(self.current_layout)
 
+        self.ids.kb_val.canvas.before.clear()
+        with self.ids.kb_val.canvas.before:
+            Color(0, 0, 0, 1)
+            Rectangle(pos=self.ids.kb_val.pos, size=self.ids.kb_val.size)
+
+    def disable_kb(self):
+        l = len(self.ids.kb.children)
+        for i in range(l):
+            self.ids.kb.children[i].disabled = True
+    def enable_kb(self):
+        l = len(self.ids.kb.children)
+        for i in range(l):
+            self.ids.kb.children[i].disabled = False
+
     def attach_kb(self):
         self.add_widget(self.ids.keyboard)
+        # self.add_widget(self.ids.keyboard, len(self.children))
     def detach_kb(self):
         self.remove_widget(self.ids.keyboard)
     
@@ -536,6 +733,8 @@ class Zaitoun(FloatLayout):
     def enter_number(self, page_val, number):
         page_val.text += (str)(number)
         self.detach_ans()
+        if len(page_val.text) == 10:
+            page_val.color = 0,1,0,1
         # if len(page_val.text) == 2 or len(page_val.text) == 5:
         #     page_val.text += (str)('-')
 
@@ -572,28 +771,35 @@ class Zaitoun(FloatLayout):
 
 
     def check_answer(self):
+        self.attach_ans()
         na = self.ids.kb_val
         global generated_number
         # print(generated_number)
         # print(na.text)
+        self.timer_reset()
         if na.text == generated_number:
-            self.attach_ans()
             self.score += 1
             self.tries += 1
-            self.load_next_question()
+            self.load_next_question(0)
         else:
-            self.attach_ans()
             self.tries += 1
-            Clock.schedule_once(self.load_next_question, 2.)
-        self.ids.score.text = "score : " + str(self.score) + "/" + str(self.tries)
-        self.ids.kb_val.text = ''
+            self.disable_kb()
+            self.ids.message.opacity = 1
+            Clock.schedule_once(self.load_next_question, 5.)
+        # self.ids.score.text = "score : " + str(self.score) + "/" + str(self.tries)
+        self.ids.score.text = str(self.tries) + "/" + str(self.score) + u'\u0020\u003a\u0020\ufec1\ufed8\ufee8\ufedf\ufe8d'
 
-    def load_next_question(self, dt):
+    def load_next_question(self,dt):
         # randint()
         self.timer_start()
         global generated_number
         generated_number = ''
         self.generate_number()
+        self.enable_kb()
+        self.ids.message.opacity = 0
+        self.attach_ans()
+        self.ids.kb_val.text = ''
+        self.ids.kb_val.color = 1,1,1,1
 
     def generate_number(self):
         global generated_number
@@ -611,88 +817,252 @@ class Zaitoun(FloatLayout):
             lbl = ZaitounLabel(tmp)
             self.ids.numbers.add_widget(lbl)
 
-    def increase_by1(self):
-        self.ids.plus1.disabled = True
-        self.ids.plus2.disabled = True
-        self.number_say20 += 1
-        self.ids.number_say20.text = str(self.number_say20)
-        if self.number_say20 >= 20:
-            self.ids.plus2.disabled = True
-            self.ids.plus1.disabled = True
-            self.score_player_say20 += 1
-            self.ids.score_player_say20.text = 'player : ' + str(self.score_player_say20)
-            Clock.schedule_once(self.reset_say20, 1.)
+
+
+#============================ lvl 1 ===================================
+
+
+    def increase_by1_l1(self):
+        self.ids.plus1_l1.disabled = True
+        self.ids.plus2_l1.disabled = True
+        self.number_say20_l1 += 1
+        self.ids.number_say20_l1.text = str(self.number_say20_l1)
+        if self.number_say20_l1 >= 20:
+            self.ids.plus2_l1.disabled = True
+            self.ids.plus1_l1.disabled = True
+            self.score_player_say20_l1 += 1
+            # self.ids.score_player_say20_l1.text = 'player : ' + str(self.score_player_say20_l1)
+            self.ids.score_player_say20_l1.text = str(self.score_player_say20_l1) + u'\u0020\u003a\u0020\ufe8f\ufecb\ufefb\ufe8d'
+            Clock.schedule_once(self.reset_say20_l1, 1.)
             return
         
-        Clock.schedule_once(self.think_response, .3)
+        Clock.schedule_once(self.think_response_l1, .3)
 
-    def increase_by2(self):
-        self.ids.plus1.disabled = True
-        self.ids.plus2.disabled = True
-        self.number_say20 += 2
-        self.ids.number_say20.text = str(self.number_say20)
-        if self.number_say20 >= 20:
-            self.ids.plus1.disabled = True
-            self.ids.plus2.disabled = True
-            self.score_player_say20 += 1
-            self.ids.score_player_say20.text = 'player : ' + str(self.score_player_say20)
-            Clock.schedule_once(self.reset_say20, 1.)
+    def increase_by2_l1(self):
+        self.ids.plus1_l1.disabled = True
+        self.ids.plus2_l1.disabled = True
+        self.number_say20_l1 += 2
+        self.ids.number_say20_l1.text = str(self.number_say20_l1)
+        if self.number_say20_l1 >= 20:
+            self.ids.plus1_l1.disabled = True
+            self.ids.plus2_l1.disabled = True
+            self.score_player_say20_l1 += 1
+            self.ids.score_player_say20_l1.text = str(self.score_player_say20_l1)  + u'\u0020\u003a\u0020\ufe8f\ufecb\ufefb\ufe8d'
+            Clock.schedule_once(self.reset_say20_l1, 1.)
             return
         # self.think_response(dt = 0)
-        Clock.schedule_once(self.think_response, .4)
+        Clock.schedule_once(self.think_response_l1, .4)
 
 
-    def think_response(self,dt):
+
+
+
+#============================ lvl 2 ===================================
+
+    def increase_by1_l2(self):
+        self.ids.plus1_l2.disabled = True
+        self.ids.plus2_l2.disabled = True
+        self.ids.plus3_l2.disabled = True
+        self.number_say20_l2 += 1
+        self.ids.number_say20_l2.text = str(self.number_say20_l2)
+        if self.number_say20_l2 >= 20:
+            self.ids.plus1_l2.disabled = True
+            self.ids.plus2_l2.disabled = True
+            self.ids.plus3_l2.disabled = True
+            self.score_player_say20_l2 += 1
+            # self.ids.score_player_say20_l2.text = 'player : ' + str(self.score_player_say20_l2)
+            self.ids.score_player_say20_l2.text = str(self.score_player_say20_l2) + u'\u0020\u003a\u0020\ufe8f\ufecb\ufefb\ufe8d'
+            Clock.schedule_once(self.reset_say20_l2, 1.)
+            return
+        
+        Clock.schedule_once(self.think_response_l2, .3)
+
+
+    def increase_by2_l2(self):
+        self.ids.plus1_l2.disabled = True
+        self.ids.plus2_l2.disabled = True
+        self.ids.plus3_l2.disabled = True
+        self.number_say20_l2 += 2
+        self.ids.number_say20_l2.text = str(self.number_say20_l2)
+        if self.number_say20_l2 >= 20:
+            self.ids.plus1_l2.disabled = True
+            self.ids.plus2_l2.disabled = True
+            self.ids.plus3_l2.disabled = True
+            self.score_player_say20_l2 += 1
+            # self.ids.score_player_say20_l2.text = 'player : ' + str(self.score_player_say20_l2)
+            self.ids.score_player_say20_l2.text = str(self.score_player_say20_l2) + u'\u0020\u003a\u0020\ufe8f\ufecb\ufefb\ufe8d'
+            Clock.schedule_once(self.reset_say20_l2, 1.)
+            return
+        # self.think_response(dt = 0)
+        Clock.schedule_once(self.think_response_l2, .4)
+
+
+    def increase_by3_l2(self):
+        self.ids.plus1_l2.disabled = True
+        self.ids.plus2_l2.disabled = True
+        self.ids.plus3_l2.disabled = True
+        self.number_say20_l2 += 3
+        self.ids.number_say20_l2.text = str(self.number_say20_l2)
+        if self.number_say20_l2 >= 20:
+            self.ids.plus1_l2.disabled = True
+            self.ids.plus2_l2.disabled = True
+            self.ids.plus3_l2.disabled = True
+            self.score_player_say20_l2 += 1
+            # self.ids.score_player_say20_l2.text = 'player : ' + str(self.score_player_say20_l2)
+            self.ids.score_player_say20_l2.text = str(self.score_player_say20_l2) + u'\u0020\u003a\u0020\ufe8f\ufecb\ufefb\ufe8d'
+            Clock.schedule_once(self.reset_say20_l2, 1.)
+            return
+        # self.think_response(dt = 0)
+        Clock.schedule_once(self.think_response_l2, .4)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def think_response_l1(self,dt):
         tmp = 0
-        if self.number_say20 % 3 == 0:
+        if self.number_say20_l1 % 3 == 0:
             tmp = 2
-        elif self.number_say20 % 3 == 1:
+        elif self.number_say20_l1 % 3 == 1:
             tmp = 1
-        elif self.number_say20 % 3 == 2:
+        elif self.number_say20_l1 % 3 == 2:
             tmp = randint(1, 2)
-        self.number_say20 += tmp
-        self.ids.number_say20.text = str(self.number_say20)
-        self.ids.operation_say20.text = '+' + str(tmp)
-        self.ids.operation_say20.color = (1,1,0,1)
-        self.ids.operation_say20.font_size = 70
-        self.ids.plus1.disabled = False  
-        self.ids.plus2.disabled = False  
+        self.number_say20_l1 += tmp
+        self.ids.number_say20_l1.text = str(self.number_say20_l1)
+        self.ids.operation_say20_l1.text = '+' + str(tmp)
+        self.ids.operation_say20_l1.color = (1,1,0,1)
+        self.ids.operation_say20_l1.font_size = 70
+        self.ids.plus1_l1.disabled = False  
+        self.ids.plus2_l1.disabled = False  
 
-        if self.number_say20 >= 20:
-            self.ids.plus1.disabled = True
-            self.ids.plus2.disabled = True
-            self.score_cpu_say20 += 1
-            self.ids.score_cpu_say20.text = 'cpu : ' + str(self.score_cpu_say20)
-            Clock.schedule_once(self.reset_say20, 1.)
+        if self.number_say20_l1 >= 20:
+            self.ids.plus1_l1.disabled = True
+            self.ids.plus2_l1.disabled = True
+            self.score_cpu_say20_l1 += 1
+            # self.ids.score_cpu_say20_l1.text = 'cpu : ' + str(self.score_cpu_say20_l1)
+            self.ids.score_cpu_say20_l1.text = str(self.score_cpu_say20_l1) + u'\u0020\u003a\u0020\ufe9e\ufedf\ufe8e\ufecc\ufee4\ufedf\ufe8d'
+            Clock.schedule_once(self.reset_say20_l1, 1.)
         # Clock.schedule_once(self.fade_operator, .0)
-        self.fade_operator(self.ids.operation_say20)
+        self.fade_operator(self.ids.operation_say20_l1)
 
-    # def fade_operator(self):
-    #     self.operator_opacity = 0
-    #     anim = Animation(operator_opacity=self.operator_opacity, duration= 10)
-    #     anim.start(self)
-    #     # while tmp > 0.:
-    #     #     tmp -= 0.000001
-    #     #     self.ids.operation_say20.color = (1, 1, 0, tmp)
-    #     self.ids.operation_say20.color = (1, 1, 0, self.operator_opacity)
-    #     self.ids.operation_say20.font_size = 70
+# 16 12 8 4 
+    def think_response_l2(self,dt):
+        tmp = 0
+        if self.number_say20_l2 % 4 == 0:
+            tmp = randint(1, 3)
+        elif self.number_say20_l2 % 4 == 1:
+            tmp = 3
+        elif self.number_say20_l2 % 4 == 2:
+            tmp = 2
+        elif self.number_say20_l2 % 4 == 3:
+            tmp = 1
+        self.number_say20_l2 += tmp
+        self.ids.number_say20_l2.text = str(self.number_say20_l2)
+        self.ids.operation_say20_l2.text = '+' + str(tmp)
+        self.ids.operation_say20_l2.color = (1,1,0,1)
+        self.ids.operation_say20_l2.font_size = 70
+        self.ids.plus1_l2.disabled = False  
+        self.ids.plus2_l2.disabled = False  
+        self.ids.plus3_l2.disabled = False  
 
-    def reset_say20(self, dt):
-        self.number_say20 = 0
-        self.ids.number_say20.text = str(self.number_say20)
-        self.fade_operator(self.ids.number_say20)
-        Clock.schedule_once(self.appear_operator, 1.)
+        if self.number_say20_l2 >= 20:
+            self.ids.plus1_l2.disabled = True
+            self.ids.plus2_l2.disabled = True
+            self.ids.plus3_l2.disabled = True
+            self.score_cpu_say20_l2 += 1
+            # self.ids.score_cpu_say20_l2.text = 'cpu : ' + str(self.score_cpu_say20_l2)
+            self.ids.score_cpu_say20_l2.text = str(self.score_cpu_say20_l2) + u'\u0020\u003a\u0020\ufe9e\ufedf\ufe8e\ufecc\ufee4\ufedf\ufe8d'
+            Clock.schedule_once(self.reset_say20_l2, 1.)
+        # Clock.schedule_once(self.fade_operator, .0)
+        self.fade_operator(self.ids.operation_say20_l2)
+
+
+
+
+# def think_response(self,dt):
+#         tmp = 0
+#         if self.number_say20_l2 % 3 == 0:
+#             tmp = 2
+#         elif self.number_say20_l2 % 3 == 1:
+#             tmp = 1
+#         elif self.number_say20_l2 % 3 == 2:
+#             tmp = randint(1, 2)
+#         self.number_say20_l2 += tmp
+#         self.ids.number_say20_l2.text = str(self.number_say20_l2)
+#         self.ids.operation_say20_l2.text = '+' + str(tmp)
+#         self.ids.operation_say20_l2.color = (1,1,0,1)
+#         self.ids.operation_say20_l2.font_size = 70
+#         self.ids.plus1.disabled = False  
+#         self.ids.plus2.disabled = False  
+
+#         if self.number_say20_l2 >= 20:
+#             self.ids.plus1.disabled = True
+#             self.ids.plus2.disabled = True
+#             self.score_cpu_say20_l2 += 1
+#             self.ids.score_cpu_say20_l2.text = 'cpu : ' + str(self.score_cpu_say20_l2)
+#             Clock.schedule_once(self.reset_say20_l2, 1.)
+#         # Clock.schedule_once(self.fade_operator, .0)
+#         self.fade_operator(self.ids.operation_say20_l2)
+
+#     # def fade_operator(self):
+#     #     self.operator_opacity = 0
+#     #     anim = Animation(operator_opacity=self.operator_opacity, duration= 10)
+#     #     anim.start(self)
+#     #     # while tmp > 0.:
+#     #     #     tmp -= 0.000001
+#     #     #     self.ids.operation_say20.color = (1, 1, 0, tmp)
+#     #     self.ids.operation_say20.color = (1, 1, 0, self.operator_opacity)
+#     #     self.ids.operation_say20.font_size = 70
+
+
+
+
+    def reset_say20_l1(self, dt):
+        self.number_say20_l1 = 0
+        self.ids.number_say20_l1.text = str(self.number_say20_l1)
+        self.fade_operator(self.ids.number_say20_l1)
+        Clock.schedule_once(self.appear_operator_l1, 1.)
+        tmp = randint(0,1)
+        # if tmp == 1:
+        #     Clock.schedule_once(self.think_response_l1, 1.)
+
+
+    def reset_say20_l2(self, dt):
+        self.number_say20_l2 = 0
+        self.ids.number_say20_l2.text = str(self.number_say20_l2)
+        self.fade_operator(self.ids.number_say20_l2)
+        Clock.schedule_once(self.appear_operator_l2, 1.)
+        tmp = randint(0,1)
+        if tmp == 1:
+            Clock.schedule_once(self.think_response_l2, 1.)
 
 
     def fade_operator(self, wdg):
         anim = Animation(color=(1,1,0,0),font_size = 100, duration= 1)
         anim.start(wdg)
-    def appear_operator(self, dt):
-        wdg = self.ids.number_say20
+    
+    def appear_operator_l1(self, dt):
+        wdg = self.ids.number_say20_l1
         anim = Animation(color=(1,1,1,1),font_size = 70, duration= .5)
         anim.start(wdg)
-        self.ids.plus1.disabled = False
-        self.ids.plus2.disabled = False
+        self.ids.plus1_l1.disabled = False
+        self.ids.plus2_l1.disabled = False
+
+    def appear_operator_l2(self, dt):
+        wdg = self.ids.number_say20_l2
+        anim = Animation(color=(1,1,1,1),font_size = 70, duration= .5)
+        anim.start(wdg)
+        self.ids.plus1_l2.disabled = False
+        self.ids.plus2_l2.disabled = False
+        self.ids.plus3_l2.disabled = False
 
 
     # def fade_operator(self, wdg):
