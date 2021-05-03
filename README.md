@@ -19,7 +19,7 @@ app to increase memorisation's skills for phone numbers, and to play vs CPU "who
 
 
 
-#### Get zaitoun mind trainer v1.0.apk (13,2 M) : [download here](https://github.com/monsef-alahem/zaitoun-mind-trainer/raw/master/zaitoun-mind-trainer-v1.0.apk)
+#### Get zaitoun mind trainer v1.0.apk (13,2 M) : [download here](https://github.com/monsef-alahem/zaitoun-mind-trainer/raw/master/zaitoun_mind_trainer-v1.0-.apk)
 
 
 
